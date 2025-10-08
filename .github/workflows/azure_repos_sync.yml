@@ -14,7 +14,7 @@ jobs:
 
       - name: Sync to Azure DevOps Repos
         run: |
-          git remote add azure https://$(AZURE_DEVOPS_USERNAME):$(AZURE_DEVOPS_PAT)@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix
+          git remote add azure https://$(AZURE_DEVOPS_USERNAME):$(AZURE_DEVOPS_PAT)@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix.git
           git push --force --mirror azure
         env:
           AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
