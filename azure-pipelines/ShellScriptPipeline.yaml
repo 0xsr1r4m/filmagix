@@ -61,6 +61,13 @@ stages:
   - job: Update
     displayName: Update K8s Manifests
     steps:
+    - script: |
+        echo "Checking variable values..."
+        echo "ORG: $(AZURE_DEVOPS_ORG)"
+        echo "PROJECT: $(AZURE_DEVOPS_PROJECT)"
+        echo "REPO: $(AZURE_DEVOPS_REPO)"
+        echo "PAT length: ${#AZURE_DEVOPS_PAT}"  # Just to verify it's passed (don’t print full PAT)
+      displayName: "Verify variables loaded"
     - task: ShellScript@2
       displayName: Run updateK8SManifests.sh
       inputs:
