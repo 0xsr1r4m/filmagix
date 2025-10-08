@@ -1,9 +1,13 @@
-name: Sync to Azure DevOps
+name: Sync to Azure Repos
 
 on:
   push:
     branches:
       - dev
+
+env:
+    AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+    AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
 
 jobs:
   sync:
@@ -12,22 +16,7 @@ jobs:
       - name: Checkout GitHub repository
         uses: actions/checkout@v3
 
-      - name: Set up Git user
-        run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-
       - name: Sync to Azure DevOps Repos
-        env:
-          AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
-          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
         run: |
-          echo "Adding or updating Azure DevOps remote..."
-          if git remote get-url azure >/dev/null 2>&1; then
-            git remote set-url azure https://${AZURE_DEVOPS_USERNAME}:${AZURE_DEVOPS_PAT}@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix.git
-          else
-            git remote add azure https://${AZURE_DEVOPS_USERNAME}:${AZURE_DEVOPS_PAT}@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix.git
-          fi
-
-          echo "Pushing changes to Azure DevOps..."
-          git push --mirror azure
+          git remote set-url azure https://${{ env.AZURE_DEVOPS_USERNAME }}:${{ env.AZURE_DEVOPS_PAT }}@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix.git
+          git push --force --mirror azure
