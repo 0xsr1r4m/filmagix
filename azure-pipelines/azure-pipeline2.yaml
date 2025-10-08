@@ -1,0 +1,62 @@
+# Azure DevOps Docker Pipeline
+# Build and push Docker image to ACR, then update K8s manifests
+
+trigger:
+- dev
+
+resources:
+- repo: self
+
+variables:
+  azureSubscriptionServiceConnection: 'acr-spn-connection'
+  imageRepository: 'filmagix'
+  containerRegistry: 'azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  name: 'docketform-build-agent'
+
+stages:
+- stage: Build
+  displayName: Build Docker Image
+  jobs:
+  - job: Build
+    displayName: Build Docker Image
+    steps:
+    - task: Docker@2
+      displayName: Build Docker Image
+      inputs:
+        containerRegistry: 'acr-docker-connection'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: '$(dockerfilePath)'
+        tags: '$(tag)'
+
+- stage: Push
+  displayName: Push Docker Image to ACR
+  dependsOn: Build
+  jobs:
+  - job: Push
+    displayName: Push Docker Image
+    steps:
+    - task: Docker@2
+      displayName: Push Docker Image
+      inputs:
+        containerRegistry: 'acr-docker-connection'
+        repository: '$(imageRepository)'
+        command: 'push'
+        tags: '$(tag)'
+
+- stage: Update
+  displayName: Update K8s Manifests
+  dependsOn: Push
+  jobs:
+  - job: Update
+    displayName: Update Kubernetes Manifests
+    steps:
+    - task: ShellScript@2
+      displayName: Run updateK8SManifests.sh
+      inputs:
+        scriptPath: 'scripts/updateK8SManifests.sh'
+        args: 'filmagix $(imageRepository) $(tag)'

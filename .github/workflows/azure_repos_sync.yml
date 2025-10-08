@@ -1,0 +1,22 @@
+name: Sync to Azure Repos
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v3
+
+      - name: Sync to Azure DevOps Repos
+        run: |
+          git remote add azure https://0xsr1r4m@dev.azure.com/0xsr1r4m/sky.xyz/_git/filmagix.git
+          git push --mirror azure
+        env:
+            AZURE_DEVOPS_USERNAME: ${{ secrets.AZURE_DEVOPS_USERNAME }}
+            AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+            

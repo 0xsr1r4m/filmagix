@@ -1,0 +1,66 @@
+trigger:
+- dev
+
+variables:
+  azureSubscriptionServiceConnection: 'acr-spn-connection' # This stays as ARM connection (azurerm)
+  containerRegistryName: 'azeacrdevpipe'  # ACR Name (without .azurecr.io)
+  containerRegistryLoginServer: 'azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io'
+  imageRepository: 'filmagix'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  name: 'docketform-build-agent'
+
+stages:
+- stage: Build
+  displayName: Build Docker Image
+  jobs:
+  - job: Build
+    displayName: Build Image
+    steps:
+    - task: AzureCLI@2
+      displayName: Build Docker Image using CLI
+      inputs:
+        azureSubscription: '$(azureSubscriptionServiceConnection)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Logging into ACR..."
+          az acr login --name $(containerRegistryName)
+
+          echo "Building Docker image..."
+          docker build -t $(containerRegistryLoginServer)/$(imageRepository):$(tag) -f $(dockerfilePath) .
+
+- stage: Push
+  displayName: Push Docker Image to ACR
+  dependsOn: Build
+  jobs:
+  - job: Push
+    displayName: Push Image
+    steps:
+    - task: AzureCLI@2
+      displayName: Push Docker Image using CLI
+      inputs:
+        azureSubscription: '$(azureSubscriptionServiceConnection)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Logging into ACR..."
+          az acr login --name $(containerRegistryName)
+
+          echo "Pushing Docker image to ACR..."
+          docker push $(containerRegistryLoginServer)/$(imageRepository):$(tag)
+
+- stage: Update
+  displayName: Update Kubernetes Deployment
+  dependsOn: Push
+  jobs:
+  - job: Update
+    displayName: Update K8s
+    steps:
+    - task: Bash@3
+      displayName: Update Kubernetes Manifests
+      inputs:
+        filePath: 'scripts/updateK8SManifests.sh'
+        arguments: 'filmagix $(imageRepository) $(tag)'
