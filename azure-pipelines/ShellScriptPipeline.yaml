@@ -2,8 +2,8 @@ trigger:
 - dev
 
 variables:
-  azureSubscriptionServiceConnection: 'acr-spn-connection' # This stays as ARM connection (azurerm)
-  containerRegistryName: 'azeacrdevpipe'  # ACR Name (without .azurecr.io)
+  azureSubscriptionServiceConnection: 'acr-spn-connection'
+  containerRegistryName: 'azeacrdevpipe'
   containerRegistryLoginServer: 'azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io'
   imageRepository: 'filmagix'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
@@ -55,12 +55,14 @@ stages:
 - stage: Update
   displayName: Update Kubernetes Deployment
   dependsOn: Push
+  variables:
+    - group: updateK8SManifests_variable_group
   jobs:
   - job: Update
-    displayName: Update K8s
+    displayName: Update K8s Manifests
     steps:
-    - task: Bash@3
-      displayName: Update Kubernetes Manifests
+    - task: ShellScript@2
+      displayName: Run updateK8SManifests.sh
       inputs:
-        filePath: 'scripts/updateK8SManifests.sh'
-        arguments: 'filmagix $(imageRepository) $(tag)'
+        scriptPath: 'scripts/updateK8SManifests.sh'
+        args: 'filmagix $(imageRepository) $(tag)'
