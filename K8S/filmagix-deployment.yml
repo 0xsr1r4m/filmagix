@@ -1,24 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    labels:
-        app: filmagix
-    name: filmagix
+  name: filmagix
+  namespace: app
+  labels:
+    app: filmagix
 spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: filmagix
-    template:
-        metadata:
-            labels:
-                app: filmagix
-        spec:
-            containers:
-            - image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:40
+  replicas: 3
+  selector:
+    matchLabels:
+      app: filmagix
+  template:
+    metadata:
+      labels:
+        app: filmagix
+    spec:
+      containers:
+        - name: filmagix-container
+          image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:40
+          ports:
+            - containerPort: 8000
               name: filmagix
-              ports:
-                - containerPort: 80
-                  name: filmagix
-            imagePullSecrets:
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          imagePullSecrets:
             - name: acr-secret1

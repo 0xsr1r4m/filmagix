@@ -18,7 +18,7 @@ spec:
             - image: azedevacrpipe/filmagix:8
               name: filmagix
               ports:
-                - containerPort: 80
+                - containerPort: 8000
                   name: filmagix
             imagePullSecrets:
             - name: acr-secret1

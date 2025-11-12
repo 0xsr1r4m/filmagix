@@ -64,12 +64,12 @@ stages:
     - script: |
         echo "Checking variable values..."
         echo "ORG: $(AZURE_DEVOPS_ORG)"
+        echo "PAT length: ${#AZURE_DEVOPS_PAT}"
         echo "PROJECT: $(AZURE_DEVOPS_PROJECT)"
         echo "REPO: $(AZURE_DEVOPS_REPO)"
-        echo "PAT length: ${#AZURE_DEVOPS_PAT}"  # Just to verify it's passed (don’t print full PAT)
       displayName: "Verify variables loaded"
     - task: ShellScript@2
-      displayName: Run updateK8SManifests.sh
+      displayName: Update Kubernetes Manifests
       inputs:
         scriptPath: 'scripts/updateK8SManifests.sh'
         args: 'filmagix $(imageRepository) $(tag)'

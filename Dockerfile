@@ -1,30 +1,35 @@
 FROM node:18-alpine AS build
 
-WORKDIR /src
+WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install
 
 COPY . .
+
 RUN npm run build
+
 
 FROM node:18-alpine
 
-WORKDIR /src
+WORKDIR /app
 
 COPY package*.json ./
+
 RUN npm install --production
 
-COPY --from=build /src/build ./build
+COPY --from=build /app/build ./build
 
 COPY src ./src
 
+
 ENV NODE_ENV=production
-ENV PORT=3000
 
-RUN addgroup appgroup && adduser -S appuser -G appgroup
-USER appuser
+ENV PORT=8000
 
-EXPOSE 3000
+EXPOSE 8000
+
+USER node
 
 CMD ["node", "src/server.js"]
