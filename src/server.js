@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const app = express();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.REACT_APP_PORT || 8001;
 
 app.use(cors({
   origin: "filmagixx-d7cfaggncqakbfgs.canadacentral-01.azurewebsites.net"

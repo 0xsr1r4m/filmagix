@@ -15,7 +15,7 @@ spec:
                 app: filmagix
         spec:
             containers:
-            - image: azedevacrpipe/filmagix:8
+            - image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:166
               name: filmagix
               ports:
                 - containerPort: 8000
