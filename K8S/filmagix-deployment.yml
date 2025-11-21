@@ -19,7 +19,7 @@ spec:
         - name: acr-secret1
       containers:
         - name: filmagix-container
-          image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:166
+          image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:223
           ports:
             - containerPort: 8000
               name: filmagix
