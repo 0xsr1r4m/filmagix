@@ -41,7 +41,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/build .
 
-COPY env.sh .
+COPY scripts/env.sh .
 
 RUN chmod +x env.sh
 
