@@ -33,3 +33,16 @@ EXPOSE 8000
 USER node
 
 CMD ["node", "src/server.js"]
+
+
+FROM nginx:alpine
+
+WORKDIR /usr/share/nginx/html
+
+COPY --from=build /app/build .
+
+COPY env.sh .
+
+RUN chmod +x env.sh
+
+CMD ["sh", "-c", "./env.sh && nginx -g 'daemon off;'"]
