@@ -28,6 +28,8 @@ ENV NODE_ENV=production
 
 ENV PORT=8000
 
+ENV REACT_APP_TMDB_KEY=d765e99bf4e07fda8dffabd8ea8a1f36
+
 EXPOSE 8000
 
 USER node
@@ -35,14 +37,14 @@ USER node
 CMD ["node", "src/server.js"]
 
 
-FROM nginx:alpine
+# FROM nginx:alpine
 
-WORKDIR /usr/share/nginx/html
+# WORKDIR /usr/share/nginx/html
 
-COPY --from=build /app/build .
+# COPY --from=build /app/build .
 
-COPY scripts/env.sh .
+# COPY scripts/env.sh .
 
-RUN chmod +x env.sh
+# RUN chmod +x env.sh
 
-CMD ["sh", "-c", "./env.sh && nginx -g 'daemon off;'"]
+# CMD ["sh", "-c", "./env.sh && nginx -g 'daemon off;'"]
