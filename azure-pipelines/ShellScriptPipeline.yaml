@@ -1,0 +1,75 @@
+trigger:
+- uat
+
+variables:
+  azureSubscriptionServiceConnection: 'acr-uat-spn-connection'
+  containerRegistryName: 'azeacruatpipe'
+  containerRegistryLoginServer: 'azeacruatpipe-e6hndxgtfafgfad7.azurecr.io'
+  imageRepository: 'filmagix-uat'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+pool:
+  name: 'DevOps Pool'
+
+stages:
+- stage: Build
+  displayName: Build Docker Image
+  jobs:
+  - job: Build
+    displayName: Build Image
+    steps:
+    - task: AzureCLI@2
+      displayName: Build Docker Image using CLI
+      inputs:
+        azureSubscription: '$(azureSubscriptionServiceConnection)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Logging into ACR..."
+          az acr login --name $(containerRegistryName)
+
+          echo "Building Docker image..."
+          docker build -t $(containerRegistryLoginServer)/$(imageRepository):$(tag) -f $(dockerfilePath) .
+
+- stage: Push
+  displayName: Push Docker Image to ACR
+  dependsOn: Build
+  jobs:
+  - job: Push
+    displayName: Push Image
+    steps:
+    - task: AzureCLI@2
+      displayName: Push Docker Image using CLI
+      inputs:
+        azureSubscription: '$(azureSubscriptionServiceConnection)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Logging into ACR..."
+          az acr login --name $(containerRegistryName)
+
+          echo "Pushing Docker image to ACR..."
+          docker push $(containerRegistryLoginServer)/$(imageRepository):$(tag)
+
+- stage: Update
+  displayName: Update Kubernetes Deployment
+  dependsOn: Push
+  variables:
+    - group: updateK8SManifests_variable_group
+  jobs:
+  - job: Update
+    displayName: Update K8s Manifests
+    steps:
+    - script: |
+        echo "Checking variable values..."
+        echo "ORG: $(AZURE_DEVOPS_ORG)"
+        echo "PAT length: ${#AZURE_DEVOPS_PAT}"
+        echo "PROJECT: $(AZURE_DEVOPS_PROJECT)"
+        echo "REPO: $(AZURE_DEVOPS_REPO)"
+      displayName: "Verify variables loaded"
+    - task: ShellScript@2
+      displayName: Update Kubernetes Manifests
+      inputs:
+        scriptPath: 'scripts/updateK8SManifests.sh'
+        args: 'filmagix $(imageRepository) $(tag)'
