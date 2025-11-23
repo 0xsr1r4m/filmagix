@@ -73,4 +73,3 @@ stages:
       inputs:
         scriptPath: 'scripts/updateK8SManifests.sh'
         args: 'filmagix $(imageRepository) $(tag)'
-        
