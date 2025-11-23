@@ -15,8 +15,6 @@ spec:
       labels:
         app: filmagix
     spec:
-      imagePullSecrets:
-        - name: acr-secret1
       containers:
         - name: filmagix-container
           image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:223
