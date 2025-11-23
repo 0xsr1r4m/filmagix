@@ -1,5 +1,5 @@
 trigger:
-- uat
+- UAT
 
 variables:
   azureSubscriptionServiceConnection: 'acr-uat-spn-connection'
