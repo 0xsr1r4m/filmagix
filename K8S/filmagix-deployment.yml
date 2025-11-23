@@ -15,8 +15,6 @@ spec:
       labels:
         app: filmagix
     spec:
-      imagePullSecrets:
-        -name: acr-uat-secret
       containers:
         - name: filmagix-container
           image: azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io/filmagix:1.1.1
@@ -35,3 +33,5 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
+      imagePullSecrets:
+        -name: acr-uat-secret
