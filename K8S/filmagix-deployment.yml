@@ -35,3 +35,4 @@ spec:
               memory: "256Mi"
       imagePullSecrets:
         - name: filmagix-acr-uat-secret
+        
