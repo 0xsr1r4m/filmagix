@@ -2,6 +2,9 @@ trigger:
   branches:
     include:
       - uat
+  paths:
+    include:
+      - azure-pipelines/ShellScriptPipeline.yaml
 
 variables:
   azureSubscriptionServiceConnection: 'acr-uat-spn-connection'
