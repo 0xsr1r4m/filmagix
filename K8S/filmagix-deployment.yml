@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: filmagix-container
-          image: azeacruatpipe-e6hndxgtfafgfad7.azurecr.io/filmagix-uat:253
+          image: azeacruatpipe-e6hndxgtfafgfad7.azurecr.io/filmagix-uat:255
           ports:
             - containerPort: 8000
               name: filmagix
