@@ -34,4 +34,4 @@ spec:
               cpu: "500m"
               memory: "256Mi"
       imagePullSecrets:
-        -name: filmagix-acr-uat-secret
+        - name: filmagix-acr-uat-secret
