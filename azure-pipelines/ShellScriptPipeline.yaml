@@ -1,16 +1,16 @@
 trigger:
-- dev
+- prod
 
 variables:
-  azureSubscriptionServiceConnection: 'acr-spn-connection'
-  containerRegistryName: 'azeacrdevpipe'
-  containerRegistryLoginServer: 'azeacrdevpipe-fxdye9ebcmczauhv.azurecr.io'
+  azureSubscriptionServiceConnection: 'acr-pd-spn-connection'
+  containerRegistryName: 'azeacrpdpipe'
+  containerRegistryLoginServer: 'azeacrpdpipe-byexc2gcdkg7auf6.azurecr.io'
   imageRepository: 'filmagix'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
 pool:
-  name: 'docketform-build-agent'
+  name: 'buildagent'
 
 stages:
 - stage: Build
