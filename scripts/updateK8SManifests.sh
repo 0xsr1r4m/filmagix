@@ -13,7 +13,7 @@ git clone "$REPO_URL" /tmp/temp_repo
 
 cd /tmp/temp_repo
 
-sed -i "s|image:.*|image: azeacrpdpipe-byexc2gcdkg7auf6.azurecr.io/$2:$3|g" K8S/$1-deployment.yml
+sed -i "s|image:.*|image: azeacrpdpipe-byexc2gcdkg7auf6.azurecr.io/$2:$3|g" K8S/$1-deployment.yaml
 
 git add .
 
