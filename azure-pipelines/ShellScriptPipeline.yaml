@@ -1,5 +1,10 @@
 trigger:
-- prod
+  branches:
+    include:
+      - prod
+  paths:
+    exclude:
+      - K8S/*
 
 variables:
   azureSubscriptionServiceConnection: 'acr-pd-spn-connection'
