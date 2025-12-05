@@ -20,7 +20,7 @@ import icons from "../../assets/icons";
 import logo from "../../assets/logo.png";
 
 const categories = [
-  { label: "Popular Movie", value: "popular" },
+  { label: "Popular", value: "popular" },
   { label: "Top Rated", value: "top_rated" },
   { label: "Upcoming", value: "upcoming" },
 ];
