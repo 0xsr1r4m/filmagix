@@ -9,8 +9,6 @@ set -ex
 
 REPO_URL="https://${AZURE_DEVOPS_ORG}:${AZURE_DEVOPS_PAT}@dev.azure.com/${AZURE_DEVOPS_ORG}/${AZURE_DEVOPS_PROJECT}/_git/${AZURE_DEVOPS_REPO}"
 
-rm -rf /tmp/temp_repo/*
-
 git clone "$REPO_URL" /tmp/temp_repo
 
 cd /tmp/temp_repo
