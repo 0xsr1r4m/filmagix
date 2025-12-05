@@ -10,7 +10,7 @@ variables:
   tag: '$(Build.BuildId)'
 
 pool:
-  name: 'buildagent'
+  name: 'DevOpsPool'
 
 stages:
 - stage: Build
