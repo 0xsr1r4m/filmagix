@@ -14,15 +14,19 @@ COPY . .
 
 RUN npm run build
 
+
 FROM node:18-alpine
 
 WORKDIR /app
+
+COPY package*.json ./
 
 RUN npm install --production
 
 COPY --from==build /app/build ./build
 
 COPY src ./src
+
 
 ENV REACT_APP_ENV=production
 
