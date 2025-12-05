@@ -23,7 +23,7 @@ COPY package*.json ./
 
 RUN npm install --production
 
-COPY --from==build /app/build ./build
+COPY --from=build /app/build ./build
 
 COPY src ./src
 
